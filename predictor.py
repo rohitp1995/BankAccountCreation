@@ -32,7 +32,7 @@ class Predict:
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
         predicted_image = v.get_image()
         im_rgb = cv.cvtColor(predicted_image, cv.COLOR_RGB2BGR)
-        os.makedirs('uploads', exist_ok= True)
-        cv.imwrite(f'uploads/{self.image_file}_OD.jpg', im_rgb)
+        # os.makedirs('uploads', exist_ok= True)
+        # cv.imwrite(f'uploads/{self.image_file}_OD.jpg', im_rgb)
         
         return output_list

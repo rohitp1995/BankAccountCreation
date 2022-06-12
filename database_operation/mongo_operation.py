@@ -295,3 +295,62 @@ class MongodbOperations:
                 return " no such collection exists"
         except Exception as e:
             raise Exception("(UpdateOneRecord): Something went wrong while updating the records" + str(e))
+
+
+    def DeleteOneRecord(self, db_name, collection, query = None):
+        """
+        This function will remove record Based on the parameter
+        """
+        try:
+            collection_check = self.CheckCollectionExistence(db_name=db_name, collection_name=collection)
+            database = database = self.getDatabase(db_name)
+            if collection_check:
+                collection = database[collection]
+                collection.delete_one(query)
+                logging.info('Collection_deleted')
+            else:
+                return " no such collection exists"
+        except Exception as e:
+            raise Exception("(DeletOneRecord): Something went wrong while deleting the records" + str(e))
+
+    def AddnewField(self, db_name, collection, condition, records):
+        """
+        This function will update record Based on the parameter
+        """
+        try:
+            collection_check = self.CheckCollectionExistence(db_name=db_name, collection_name=collection)
+            database = database = self.getDatabase(db_name)
+            if collection_check:
+                collection = database[collection]
+                collection.update_many(condition, records)
+                logging.info('Collection_Updated')
+            else:
+                return " no such collection exists"
+        except Exception as e:
+            raise Exception("(AddnewField): Something went wrong while adding new field in the records" + str(e))
+
+
+    def getnextcount(self, db_name, collection, value):
+        """
+        This function will check count and return the next number
+        """
+        try:
+            collection_check = self.CheckCollectionExistence(db_name=db_name, collection_name=collection)
+            database = database = self.getDatabase(db_name)
+            if collection_check:
+                collection = database[collection]
+                doc_count = collection.count_documents({})
+
+                if doc_count == 1:
+                    acc_number = int('10000000')
+                    return acc_number
+                else:
+                    max_collection = collection.find().sort(value,-1).limit(1)
+                    for i in max_collection:
+                        acc_number = i['account_number'] + 1 
+                        return acc_number
+        
+            else:
+                return " no such collection exists"
+        except Exception as e:
+            raise Exception("(getnextcount): Something went wrong while checking count and adding account number" + str(e))

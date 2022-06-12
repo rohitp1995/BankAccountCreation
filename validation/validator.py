@@ -53,8 +53,7 @@ class validator:
                     json_object = json.dumps(details, indent = 4)
 
                     with open('output.json', 'w') as f:
-                        f.write(json_object)
-                        
+                        f.write(json_object) 
                     return message
 
             else:

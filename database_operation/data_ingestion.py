@@ -10,28 +10,42 @@ import json
 
 class insertdata:
 
-    def __init__(self, record, config_path):
+    try:
 
-        self.record = record
-        self.config = read_config(config_path)
-        self.db_ops = MongodbOperations(self.config['database']['username'], self.config['database']['pwd'])
-        
-    def check_duplicate_and_insert(self):
+        def __init__(self, record, config_path):
 
-        try:
-            if self.db_ops.CheckCollectionExistence(self.config['database']['db_name'], self.config['database']['collection']):
-                query = { 'number': self.record['number'] }
-                exist = self.db_ops.FindOneRecord(self.config['database']['db_name'], self.config['database']['collection'], query)
-                if exist:
-                    message = 5
-                    return message
-                else:
-                    message = 3
+            self.record = record
+            self.config = read_config(config_path)
+            self.db_ops = MongodbOperations(self.config['database']['username'], self.config['database']['pwd'])
+            
+        def check_duplicate(self):
+
+            try:
+                if self.db_ops.CheckCollectionExistence(self.config['database']['db_name'], self.config['database']['collection']):
+                    query = { 'number': self.record['number'] }
+                    exist = self.db_ops.FindOneRecord(self.config['database']['db_name'], self.config['database']['collection'], query)
+                    if exist:
+                        self.message = 5
+                        return self.message
+                    else:
+                        self.message = 3
+                        return self.message
+
+            except Exception as e:
+                self.logger.error('Error while checking for duplicates: ' + str(e))
+                sys.exit(1)
+
+        def insert(self):
+            try:
+                if self.message == 3:
                     self.db_ops.InsertOneRecord(self.config['database']['db_name'], self.record, self.config['database']['collection'])    
-                    return message
 
-        except Exception as e:
-            self.logger.error('Error while inserting the data: ' + str(e))
-            sys.exit(1)
-     
+            except Exception as e:
+                self.logger.error('Error while inserting the data: ' + str(e))
+                sys.exit(1)
+
+    except Exception as e:
+        self.logger.error('Error while data ingestion: ' + str(e))
+        sys.exit(1)
+
 
