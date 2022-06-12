@@ -1,0 +1,5 @@
+database:
+  db_name: bankaccount
+  collection: acc_info
+  username: Rohit
+  pwd: Mongodb

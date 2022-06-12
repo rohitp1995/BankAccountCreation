@@ -1,0 +1,9 @@
+{
+    "0": "Could not verify the name from aadhar card, please upload a clear image again",
+    "1": "Could not verify the aadhar number from aadhar card, please upload a clear image again",
+    "1.1": "The aadhar number fetched is not valid as per the GOI Regulation, please upload a valid aadhar card image",
+    "2": "Could not verify the gender from aadhar card, please upload a clear image again",
+    "3": "Congratulation, Your Account has been created and all the details have been sent to your Email",
+    "4": "Could not verify the aadhar image, please upload a clear image again",
+    "5": "The Aadhar entry of the customer already exist."
+}
