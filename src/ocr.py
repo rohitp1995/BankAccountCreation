@@ -29,16 +29,12 @@ class OCR:
             face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
             faces = face_cascade.detectMultiScale(gray, 1.3, 7)
             sex = 'NA'
-            print(faces)
             if len(faces) != 0:
                 self.logger.info('Started fetching name and gender')
 
                 for (x, y, w, h) in faces:
-                    print(y)
+
                     roi_color = gray[y-60: y + h+40, x: x + w+900]
-                    cv2.imshow('image1', roi_color)
-                    cv2.waitKey(0)
-                    cv2.destroyAllWindows()
                     text = pytesseract.image_to_string(roi_color)
                     name = str(re.findall(r"[A-Z][a-z]+,?\s+(?:[A-Z][a-z]*\.?\s*)?[A-Z][a-z]+", text, flags=re.DOTALL)).replace("]", "").replace("[","").replace("'", "")
                     sex = str(re.findall(r"Male|MALE|Female|FEMALE", text)).replace("[","").replace("'", "").replace("]", "")
@@ -61,18 +57,12 @@ class OCR:
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
             faces = face_cascade.detectMultiScale(gray, 1.3, 7)
-
+            
             if len(faces) != 0:
-                
                 for (x, y, w, h) in faces:
-
                     for z in range(1,4):    
-                    
-                        roi_gray = gray[x+w+100: x+w + 50000, x+w: x+w + 50000]
+                        roi_gray = gray[x+w+90: x+w + 50000, x+w: x+w + 50000]
                         roi_gray_zoom = zoom(roi_gray, z)
-                        cv2.imshow('image1',roi_gray_zoom)
-                        cv2.waitKey(0)
-                        cv2.destroyAllWindows()
                         text = pytesseract.image_to_string(roi_gray_zoom).upper().replace(" ", "")
                         number = str(re.findall(r"[0-9]{11,12}", text)).replace("]", "").replace("[","").replace("'", "")
                         
@@ -80,12 +70,11 @@ class OCR:
                             break
                         else:
                             continue
-
                 return number 
 
-            else:         
-                self.logger.info('Could not detect aadhar number while scanning the aadhar card')
-                sys.exit(1)
+            else:      
+                number = ''
+                return number
 
         except Exception as e:
             self.logger.error('Error while storing the name: ' + str(e))
@@ -120,7 +109,7 @@ class OCR:
             date = str(re.findall(r"[\d]{1,4}[/-][\d]{1,4}[/-][\d]{1,4}", text)).replace("]", "").replace("[","").replace("'", "")
             
             if date in ('',None):
-                date = '01/01/1900'
+                date = '01/01/1960'
 
             return date
             self.logger.info('Completed fetching other details from image') 

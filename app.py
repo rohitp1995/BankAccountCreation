@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import argparse 
 import warnings
@@ -12,8 +13,9 @@ from src.utils.common import read_config
 from database_operation.mongo_operation import MongodbOperations
 from database_operation.data_ingestion import insertdata
 from src.account_number import AccountNumber
+from src.utils.get_mail_message import replace_placeholders
+from email_account import mail
 import json
-    
 
 class App:
 
@@ -23,6 +25,7 @@ class App:
         self.config_obj = read_config(self.config)
         self.db_ops = MongodbOperations(self.config_obj['database']['username'], self.config_obj['database']['pwd'])
         self.next_acc = AccountNumber(self.config_obj)
+        self.mail = mail(self.config_obj)
 
     def get_record(self):
         with open('output.json', 'r') as openfile:
@@ -64,9 +67,13 @@ class App:
                 mail   = {"$set": {'email': Email_Address}}
                 self.db_ops.AddnewField(self.config_obj['database']['db_name'], self.config_obj['database']['collection'],
                                         condition, mail)
-                account_number = {"$set": {'account_number': self.next_acc.get_account_number()}}
+                acc_number = self.next_acc.get_account_number()
+                set_acc_number = {"$set": {'account_number': acc_number}}
                 self.db_ops.AddnewField(self.config_obj['database']['db_name'], self.config_obj['database']['collection'],
-                                        condition, account_number)
+                                        condition, set_acc_number)
+                ## sending email
+                mail_msg = replace_placeholders(Name, acc_number)
+                self.mail.sendmail(Email_Address, mail_msg)
 
             btn = st.button('go back')
             if btn :
@@ -106,6 +113,9 @@ class App:
             ## validating and inserting into db if valid
             val_obj = validator(result, uploaded_file.name)
             message = val_obj.isaadharvalid()
+
+            print(uploaded_file.name)
+            os.remove(uploaded_file.name)
 
             with open('message.json', 'r') as openfile:
                 text_m = json.load(openfile)

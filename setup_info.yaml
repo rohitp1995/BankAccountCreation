@@ -3,3 +3,9 @@ database:
   collection: acc_info
   username: Rohit
   pwd: Mongodb
+
+EMAIL:
+ USER: rohit050695@gmail.com
+ PWD: cxzynbwfvinqvwjx
+ FROM: bankaccount@abc.com
+ SUBJECT: New Account Created
