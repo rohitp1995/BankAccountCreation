@@ -8,7 +8,7 @@ from email.utils import COMMASPACE, formatdate
 from email import encoders
 import os
 import json
-
+from log.logger import Logger
 
 class mail:
     def __init__(self, config):
@@ -17,6 +17,8 @@ class mail:
         self.user = param['USER']
         self.pwd =  param['PWD']
         self.From = param['FROM']
+        self.log_obj = Logger('Generatedlogs')
+        self.logger = self.log_obj.logging()
         self.Subject = param['SUBJECT']
 
     def sendmail(self, To, mail_msg):
@@ -29,6 +31,7 @@ class mail:
         msg.attach(MIMEText(mail_msg))        
         
         try:
+            self.logger.info('sending email to customer')
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
             server.login(self.user, self.pwd)
@@ -36,5 +39,8 @@ class mail:
             server.close()
             print ('successfully sent the mail')
         except Exception as e:
-            print(e)
+            self.logger.error('Error while sending email to customer: ' + str(e))
+            sys.exit(1)
+
+
 

@@ -4,6 +4,7 @@ import argparse
 import warnings
 from PIL import Image, ImageOps
 warnings.filterwarnings('ignore')
+import sys
 import time
 import json
 from predictor import Predict
@@ -20,7 +21,7 @@ import json
 class App:
 
     def __init__(self, config_path):
-        
+            
         self.config = config_path
         self.config_obj = read_config(self.config)
         self.db_ops = MongodbOperations(self.config_obj['database']['username'], self.config_obj['database']['pwd'])
@@ -114,7 +115,6 @@ class App:
             val_obj = validator(result, uploaded_file.name)
             message = val_obj.isaadharvalid()
 
-            print(uploaded_file.name)
             os.remove(uploaded_file.name)
 
             with open('message.json', 'r') as openfile:

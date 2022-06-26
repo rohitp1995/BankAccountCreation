@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(CURRENT_DIR))
 from src.ocr import OCR
 from validation.verhoff_verification import validateVerhoeff
 import json
-
+from log.logger import Logger
 
 class validator:
 
@@ -13,12 +13,14 @@ class validator:
         
         self.result = result
         self.image = image
+        self.log_obj = Logger('Generatedlogs')
+        self.logger = self.log_obj.logging()
         self.ocr_obj = OCR(self.image)
 
     def isaadharvalid(self):
         
         try:
-
+            self.logger.info('started validating aadhar card')
             if [0,1,2] == self.result:
                 
                 message = 3

@@ -9,8 +9,6 @@ sys.path.append(os.path.dirname(CURRENT_DIR))
 from log.logger import Logger
 from src.utils.utils import zoom
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
 class OCR:
 
     def __init__(self, image):
@@ -18,7 +16,7 @@ class OCR:
         self.image = image
         self.log_obj = Logger('Generatedlogs')
         self.logger = self.log_obj.logging()
-
+        
     def store_name_and_sex(self):
 
         try:

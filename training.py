@@ -18,11 +18,14 @@ class Train:
         self.coco_file = coco_file
         self.model_name = model_name
         self.model_cfg = get_cfg()
+        self.log_obj = Logger('Generatedlogs')
+        self.logger = self.log_obj.logging()
+
 
     def trainmodel(self):
 
         try:
-
+            self.logger.info('Started training the model')
             register_coco_instances("sample", {}, self.coco_file, self.image_dir)
             sample_metadata = MetadataCatalog.get("sample")
             dataset_dicts = DatasetCatalog.get("sample")
@@ -35,8 +38,8 @@ class Train:
             trainer.train()
 
         except Exception as e:
-            print(e)
-            sys.exit(1)
+            self.logger.error('Error while training the model: ' + str(e))
+            sys.exit(1) 
 
 
 if __name__ == '__main__':
