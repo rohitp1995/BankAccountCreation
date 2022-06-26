@@ -27,16 +27,19 @@ We gathered image data for aadhar card from the internet. The data was already a
 * git clone the repository in your system
 * pip install -r requirements.txt
 * python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
-* download the entire model output folder from ``` link here ``` and save it to your local cloned folder
+* download the entire model output folder from ```https://drive.google.com/drive/folders/1GDgXKRu__aAtPerpOH0mEnaGKSOPTjff?usp=sharing``` and save it to your local cloned folder
 * run the following comand streamlit run app.py
+
+**OR**
+
+* you can pull the docker image from the dockerhub docker pull rohit0506/dockerhub:accountcreator
+* get the docker image id by running ```docker images``` command
+* after that run ```docker run -p 8501:8501 <image id>
 
 ## Application Home Page
 
 ![image](https://user-images.githubusercontent.com/29440153/174070120-dc00e502-96d6-417d-b533-75656e2f104f.png)
 
-## AWS Deployment link
- To be added 
- 
 ## Project Demo Video
 To be added
 
